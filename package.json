@@ -1,0 +1,14 @@
+{
+  "name": "stix",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "es6-shim": "*",
+    "flour": "*",
+    "uglify-js": "*",
+    "coffee-script": "*",
+    "jshint": "*",
+    "mocha": "*",
+    "chai": "*"
+  }
+}

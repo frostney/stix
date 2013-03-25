@@ -1,0 +1,39 @@
+flour = require 'flour'
+fs = require 'fs'
+path = require 'path'
+require 'es6-shim'
+zlib = require 'zlib'
+gzip = zlib.createGzip()
+
+SOURCE = 'src'
+OUTPUT = 'lib'
+MAINFILE = 'stix'
+EXAMPLES = 'examples'
+
+task 'build:debug', -> 
+  compile "#{SOURCE}/#{MAINFILE}.coffee", "#{OUTPUT}/#{MAINFILE}.js"
+
+task 'build:production', ->
+  compile "#{SOURCE}/#{MAINFILE}.coffee", "#{OUTPUT}/#{MAINFILE}.js", ->
+    minify "#{OUTPUT}/#{MAINFILE}.js", "#{OUTPUT}/#{MAINFILE}.min.js", ->
+      fs.readFile "#{OUTPUT}/#{MAINFILE}.min.js", (err, data) ->
+        buffer = zlib.deflate data, (e, buf) ->
+          fs.writeFile "#{OUTPUT}/#{MAINFILE}.min.js.gz", buf
+
+task 'build:examples', ->
+  exampleFolderArray = fs.readdirSync("#{EXAMPLES}")
+
+  for i in exampleFolderArray
+    fileArray = []
+    exampleFolderContent = fs.readdirSync(path.join(EXAMPLES, i))
+
+    fileArray = do -> 
+      for j in exampleFolderContent
+        if j.endsWith('.coffee') then fileArray.push j else continue
+
+    if fileArray.length > 0 then compile "#{EXAMPLES}/#{i}/*.coffee", "#{EXAMPLES}/#{i}/*"   
+
+task 'build', ->
+  invoke 'build:debug'
+  invoke 'build:production'
+  invoke 'build:examples'

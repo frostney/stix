@@ -3,7 +3,7 @@ do ($ = @jQuery, stix = @stix) ->
   content = ''
   
   for i in [0..10]
-    content += stix
+    content += do stix.compile
       li: ->
         span: ->
           "This is item #{i}" 

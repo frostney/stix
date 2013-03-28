@@ -4,7 +4,7 @@
 
     content = '';
     for (i = _i = 0; _i <= 10; i = ++_i) {
-      content += stix({
+      content += stix.compile({
         li: function() {
           return {
             span: function() {
@@ -12,7 +12,7 @@
             }
           };
         }
-      });
+      })();
     }
     return $('body').prepend(content);
   })(this.jQuery, this.stix);

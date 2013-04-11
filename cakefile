@@ -9,6 +9,7 @@ SOURCE = 'src'
 OUTPUT = 'lib'
 MAINFILE = 'stix'
 EXAMPLES = 'examples'
+TESTS = 'test'
 
 task 'build:debug', -> 
   compile "#{SOURCE}/#{MAINFILE}.coffee", "#{OUTPUT}/#{MAINFILE}.js"
@@ -21,7 +22,7 @@ task 'build:production', ->
           fs.writeFile "#{OUTPUT}/#{MAINFILE}.min.js.gz", buf
 
 task 'build:examples', ->
-  exampleFolderArray = fs.readdirSync("#{EXAMPLES}")
+  exampleFolderArray = fs.readdirSync "#{EXAMPLES}"
 
   for i in exampleFolderArray
     fileArray = []
@@ -33,7 +34,10 @@ task 'build:examples', ->
 
     if fileArray.length > 0 then compile "#{EXAMPLES}/#{i}/*.coffee", "#{EXAMPLES}/#{i}/*"   
 
+task 'build:test', -> compile "#{TESTS}/*.coffee", "#{TESTS}/*"
+
 task 'build', ->
   invoke 'build:debug'
   invoke 'build:production'
   invoke 'build:examples'
+  invoke 'build:test'

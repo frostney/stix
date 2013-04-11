@@ -1,6 +1,6 @@
 do (root = module?.exports ? this) ->
 
-  fragment = (template, options = {compress: false, recursive: true}) ->
+  fragment = (template, options = {compress: root.stix.compress, recursive: true}) ->
     content = ''
     
     if typeof template is 'string'
@@ -21,6 +21,7 @@ do (root = module?.exports ? this) ->
     content
 
   root.stix = 
+    compress: false
     fragment: fragment
-    compile: (template, options = {compress: false}) ->
+    compile: (template) ->
       -> fragment(template)
